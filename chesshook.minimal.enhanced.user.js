@@ -27,6 +27,92 @@
     const namespace = 'chesshook_minimal_enhanced';
     window[namespace] = {};
 
+    // Floating Toggle Button
+    class FloatingToggle {
+      constructor() {
+        this.button = null;
+        this.isVisible = true;
+        this.createButton();
+        this.bindEvents();
+      }
+
+      createButton() {
+        this.button = document.createElement('div');
+        this.button.id = 'chesshook-floating-toggle';
+        this.button.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 20px;
+          transform: translateY(-50%);
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          font-weight: bold;
+          cursor: pointer;
+          z-index: 10001;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+          transition: all 0.3s ease;
+          user-select: none;
+          border: 2px solid rgba(255,255,255,0.3);
+        `;
+        this.button.innerHTML = 'Hi';
+        this.button.title = 'Chesshook Enhanced - Click to toggle UI';
+
+        // Add hover effects
+        this.button.addEventListener('mouseenter', () => {
+          this.button.style.transform = 'translateY(-50%) scale(1.1)';
+          this.button.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
+        });
+
+        this.button.addEventListener('mouseleave', () => {
+          this.button.style.transform = 'translateY(-50%) scale(1)';
+          this.button.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+        });
+
+        document.body.appendChild(this.button);
+      }
+
+      bindEvents() {
+        this.button.addEventListener('click', () => {
+          // Toggle the main UI
+          if (window.chesshookUI) {
+            window.chesshookUI.toggle();
+          }
+          
+          // Add a small animation
+          this.button.style.transform = 'translateY(-50%) scale(0.9)';
+          setTimeout(() => {
+            this.button.style.transform = 'translateY(-50%) scale(1)';
+          }, 150);
+        });
+      }
+
+      show() {
+        this.button.style.display = 'flex';
+        this.isVisible = true;
+      }
+
+      hide() {
+        this.button.style.display = 'none';
+        this.isVisible = false;
+      }
+
+      toggle() {
+        if (this.isVisible) {
+          this.hide();
+        } else {
+          this.show();
+        }
+      }
+    }
+
     // Simple UI Component
     class SimpleUI {
       constructor() {
@@ -84,6 +170,8 @@
             <div>${config.toggleAutoMoveKey}: Toggle Auto</div>
             <div>${config.engineSwitchKey}: Switch Engine</div>
             <div>${config.clearArrowsKey}: Clear Arrows</div>
+            <div>Alt+U: Toggle UI</div>
+            <div>Alt+H: Toggle Floating Button</div>
           </div>
         `;
 
@@ -134,8 +222,13 @@
       }
     }
 
-    // Initialize UI
+    // Initialize UI and Floating Toggle
     const ui = new SimpleUI();
+    const floatingToggle = new FloatingToggle();
+    
+    // Make UI accessible globally for the floating toggle
+    window.chesshookUI = ui;
+    
     if (config.showUI) {
       ui.show();
     }
@@ -520,6 +613,12 @@
       if (e.altKey && e.key === 'U') {
         e.preventDefault();
         ui.toggle();
+      }
+      
+      // Alt+H: Toggle floating button
+      if (e.altKey && e.key === 'H') {
+        e.preventDefault();
+        floatingToggle.toggle();
       }
     });
 
