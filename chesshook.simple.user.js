@@ -1956,7 +1956,7 @@
     addToConsole(`Loaded! This is version ${GM_info.script.version}`);
     addToConsole(`Github: https://github.com/0mlml/chesshook`);
     addToConsole(`Note: External errors (Sentry, AudioContext, etc.) are from chess.com and not related to this script.`);
-          console.log('[Chesshook Lite] Script loaded successfully! Use Alt+K for config, Alt+O for settings, Alt+M for auto move, Alt+C for console, Alt+L for tools');
+    console.log('[Chesshook Lite] Script loaded successfully! Use Alt+K for config, Alt+O for settings, Alt+M for auto move, Alt+C for console, Alt+L for tools');
     
     // Handle external errors gracefully
     handleExternalErrors();
